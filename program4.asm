@@ -95,260 +95,260 @@ main ENDP
 ;*******************
 ;introduction - This procedure introduces the name of the program, programmer and what the program does
 ;	receives: 
-;			[ebp+20] = prompt1
-;			[ebp+16] = prompt2
-;			[ebp+12] = prompt3
-;			[ebp+8]  = prompt4
+;		[ebp+20] = prompt1
+;		[ebp+16] = prompt2
+;		[ebp+12] = prompt3
+;		[ebp+8]  = prompt4
 ;	returns: none
 ;	preconditions: prompt1 through prompt4 must be pushed on stack
 ;	postconditions: changes register edx
 ;********************
 introduction PROC
 	push	ebp
-	mov		ebp, esp
+	mov	ebp, esp
 
-	mov		edx, OFFSET prompt1
+	mov	edx, OFFSET prompt1
 	call	WriteString
-	call	Crlf
-
-	mov		edx, OFFSET prompt2
-	call	WriteString
-	call	Crlf
-	mov		edx, OFFSET prompt3
-	call	WriteString
-	call	Crlf
-	mov		edx, OFFSET prompt4
-	call	WriteString
-	call	Crlf
 	call	Crlf
 
-	pop		ebp
-	ret		16
+	mov	edx, OFFSET prompt2
+	call	WriteString
+	call	Crlf
+	mov	edx, OFFSET prompt3
+	call	WriteString
+	call	Crlf
+	mov	edx, OFFSET prompt4
+	call	WriteString
+	call	Crlf
+	call	Crlf
+
+	pop	ebp
+	ret	16
 introduction ENDP
 
 ;****************
 ;getData - This procedure receives a parameter (ie userNum) by reference and then validates it [10-200]
 ;	receives: 
-;			[ebp+12] = count
-;			[ebp+8]	 = prompt5
-;			Global variables: MIN, MAX
+;		[ebp+12] = count
+;		[ebp+8]	 = prompt5
+;		Global variables: MIN, MAX
 ;	returns: count with a valid # [10-200]
 ;	preconditions: count must be uninitialized
 ;	postconditions: changes registers eax, ebx, edx
 ;****************
 getData PROC
 	push	ebp
-	mov		ebp, esp
+	mov	ebp, esp
 
 	getNumber:
-		mov		edx, OFFSET prompt5
+		mov	edx, OFFSET prompt5
 		call	WriteString
 		call	ReadInt
 
 	validate:
-		cmp		eax, MIN
-		jl		invalidNum
-		cmp		eax, MAX
-		jg		invalidNum
-		jmp		finished
+		cmp	eax, MIN
+		jl	invalidNum
+		cmp	eax, MAX
+		jg	invalidNum
+		jmp	finished
 
 	invalidNum:
-		mov		edx, OFFSET prompt6
+		mov	edx, OFFSET prompt6
 		call	WriteString
 		call	Crlf
-		jmp		getNumber
+		jmp	getNumber
 
 	finished:
-		mov		ebx, [ebp+12]		;address of count moved in ebx
-		mov		[ebx], eax			;value in eax moved to address in ebx
-		pop		ebp
-		ret		8
+		mov	ebx, [ebp+12]		;address of count moved in ebx
+		mov	[ebx], eax			;value in eax moved to address in ebx
+		pop	ebp
+		ret	8
 getData	ENDP
 
 ;************************
 ;fillArray - This procedure will fill the array, listArray with random integers
 ;	receives: 
-;			[ebp+12] = OFFSET listArray
-;			[ebp+8] =count
+;		[ebp+12] = OFFSET listArray
+;		[ebp+8] =count
 ;	returns: listArray filled with random integers generated
 ;	preconditions: listArray must be uninitialized
 ;	postconditions: changes registers eax, ebx, ecx
 ;************************
 fillArray PROC
 	push	ebp
-	mov		ebp, esp
+	mov	ebp, esp
 
-	mov		ecx, [ebp+8]		;count moved in ecx
-	mov		edi, [ebp+12]		;move OFFSET of listArray into EDI to use with indirect addressing
+	mov	ecx, [ebp+8]		;count moved in ecx
+	mov	edi, [ebp+12]		;move OFFSET of listArray into EDI to use with indirect addressing
 
 	call	Randomize			;must only be called once like in C & C++. W/o this you get the same random #'s
 
 	;used randomRange example from lecture 20 - Wk 5
 	fill:
-		mov		eax, hi
-		sub		eax, lo
-		inc		eax
+		mov	eax, hi
+		sub	eax, lo
+		inc	eax
 		call	RandomRange
-		add		eax, lo				;generate a # 100-999
-		mov		[edi], eax			;moving value in eax to the sequential memory address location in listArray [edi]
-		add		edi, 4				;add 4 to edi as operand size is DWORD and to progress through each spot in listArray's memory
+		add	eax, lo				;generate a # 100-999
+		mov	[edi], eax			;moving value in eax to the sequential memory address location in listArray [edi]
+		add	edi, 4				;add 4 to edi as operand size is DWORD and to progress through each spot in listArray's memory
 	loop fill
 
-	pop		ebp
-	ret		8
+	pop	ebp
+	ret	8
 fillArray ENDP
 
 ;*********************
 ;displayList - This procedure receives 3 parameters and displays the array, listArray.
 ;	receives:	
-;			[ebp+20] = OFFSET listArray
-;			[ebp+16] = count
-;			[ebp+12] = tracker
-;			[ebp+8]  = prompt7  (when procedure is called a second time, [ebp+8] = prompt8)
+;		[ebp+20] = OFFSET listArray
+;		[ebp+16] = count
+;		[ebp+12] = tracker
+;		[ebp+8]  = prompt7  (when procedure is called a second time, [ebp+8] = prompt8)
 ;	returns: does not return anything to .main, just displays items in array
 ;	preconditions: listArray must be initialized with random numbers generated in fillArray procedure
 ;	postconditions: changes registers eax, ebx, ecx, edx
 ;********************
 displayList PROC
 	push	ebp
-	mov		ebp, esp
+	mov	ebp, esp
 
-	mov		ecx, [ebp+16]		;move counter into ecx
-	mov		esi, [ebp+20]		;move OFFSET of listArray into ESI to use with indirect addressing
-	mov		ebx, [ebp+12]		;move tracker to ebx
+	mov	ecx, [ebp+16]		;move counter into ecx
+	mov	esi, [ebp+20]		;move OFFSET of listArray into ESI to use with indirect addressing
+	mov	ebx, [ebp+12]		;move tracker to ebx
 	
 	;pass by reference string signifying unsorted list first time called and sorted list second time procedure is called
 	call	Crlf
-	mov		edx, [ebp+8]		;offset of prompt moved to edx register with call WriteString right after
+	mov	edx, [ebp+8]		;offset of prompt moved to edx register with call WriteString right after
 	call	WriteString
 
 	newLine:
 		call	Crlf
-		mov		ebx, 0			;reset tracker to 0 to track items in new line
+		mov	ebx, 0			;reset tracker to 0 to track items in new line
 
 	display:
-		cmp		ebx, 10			;placed here to prevent a 0 from being printed after all elements are printed if counter is 20, 30, 40 etc...
-		je		newLine
-		mov		eax, [esi]
+		cmp	ebx, 10			;placed here to prevent a 0 from being printed after all elements are printed if counter is 20, 30, 40 etc...
+		je	newLine
+		mov	eax, [esi]
 		call	WriteDec
-		add		esi, 4
-		mov		edx, OFFSET spaces
+		add	esi, 4
+		mov	edx, OFFSET spaces
 		call	WriteString
-		inc		ebx
+		inc	ebx
 	loop	display
 
-	pop		ebp
-	ret		16
+	pop	ebp
+	ret	16
 displayList ENDP
 
 ;************************
 ;sortList - This procedure will sort the values in the array that is passed by refernce in descending order and calculate the median
 ;	receives:
-;			[ebp+8] = OFFSET listArray
-;			[ebp+12] = count
+;		[ebp+8] = OFFSET listArray
+;		[ebp+12] = count
 ;	returns: listArray is sorted in descending order.
 ;	preconditions: listArray must be initialized with random values from fillArray
 ;	postconditions: changes registers eax, ebx, ecx, edx
 ;************************
 sortList PROC
 	push	ebp
-	mov		ebp, esp
+	mov	ebp, esp
 
-	mov		edi, [ebp+8]			;moving offset of listArray into esi
-	mov		ecx, [ebp+12]			;count
-	dec		ecx
-	mov		ebx, edi				;save ptr to listArry in ebx
+	mov	edi, [ebp+8]			;moving offset of listArray into esi
+	mov	ecx, [ebp+12]			;count
+	dec	ecx
+	mov	ebx, edi				;save ptr to listArry in ebx
 
 	outerLoop:
-		mov		eax, edi
-		mov		esi, ecx
+		mov	eax, edi
+		mov	esi, ecx
 
 		innerLoop:
- 			add		edi, 4				;4 added b/c operand size is DWORD; progressing through each spot in array via memory+4
-			mov		edx, [eax]			;move value currently in eax to edx
-			cmp		edx, [edi]			;comparing value in edx with value in next item in listArray
-			ja		keepGoing			;if left operand is above (ie higher in value) than right operand, ja to keepGoing insturction which will call innerLoop to run again to compare current value in eax to next value in listArray
-			mov		eax, edi			;if left operand is not above than right operand, value moved to eax and loop continues to run with new value in eax
+ 			add	edi, 4				;4 added b/c operand size is DWORD; progressing through each spot in array via memory+4
+			mov	edx, [eax]			;move value currently in eax to edx
+			cmp	edx, [edi]			;comparing value in edx with value in next item in listArray
+			ja	keepGoing			;if left operand is above (ie higher in value) than right operand, ja to keepGoing insturction which will call innerLoop to run again to compare current value in eax to next value in listArray
+			mov	eax, edi			;if left operand is not above than right operand, value moved to eax and loop continues to run with new value in eax
 
 			keepGoing:	
 				loop	innerLoop
 				
-		mov		edx, [ebx]				;moving ptr pointing to memory location in listArray to edx
+		mov	edx, [ebx]				;moving ptr pointing to memory location in listArray to edx
 		xchg	[eax], edx				;exhcange memory location edx with value in [eax]
 		xchg	[ebx], edx
 
-		add		ebx, 4
-		mov		edi, ebx
-		mov		ecx, esi
+		add	ebx, 4
+		mov	edi, ebx
+		mov	ecx, esi
 	loop	outerLoop
 	
-	pop		ebp
-	ret		8
+	pop	ebp
+	ret	8
 sortList	ENDP
 
 ;**********************
 ;displayMedian: This procedure will calculate the median out of the sorted array and display it.
 ;	receives:
-;			[ebp+20] = count
-;			[ebp+16] = OFFSET listArray
-;			[ebp+12] = OFFSET prompt9
-;			[ebp+8]  = OFFSET period
+;		[ebp+20] = count
+;		[ebp+16] = OFFSET listArray
+;		[ebp+12] = OFFSET prompt9
+;		[ebp+8]  = OFFSET period
 ;	returns: displays the median to the display
 ;	preconditions: listArray must be initalized and be sorted in descending order
 ;	postconditions: changes registers eax, ebx, ecx, edx
 ;**********************
 displayMedian PROC
 	push	ebp
-	mov		ebp, esp
+	mov	ebp, esp
 
-	mov		edi, [ebp+16]
-	mov		eax, [ebp+20]
+	mov	edi, [ebp+16]
+	mov	eax, [ebp+20]
 
 	call	Crlf
 	call	Crlf
-	mov		edx, [ebp+12]
+	mov	edx, [ebp+12]
 	call	WriteString
 
-	mov		ecx, 2
+	mov	ecx, 2
 	cdq
-	div		ecx
-	cmp		edx, 0		;if remainder is == 0, jmp to evenNum, else it is a odd #
-	je		evenNum
+	div	ecx
+	cmp	edx, 0		;if remainder is == 0, jmp to evenNum, else it is a odd #
+	je	evenNum
 	
-	mov		ecx, 4		;if odd, program continues as it skips the je instruction
-	mul		ecx
-	add		edi, eax
-	mov		eax, [edi]
+	mov	ecx, 4		;if odd, program continues as it skips the je instruction
+	mul	ecx
+	add	edi, eax
+	mov	eax, [edi]
 	call	WriteDec
-	mov		edx, [ebp+8]
+	mov	edx, [ebp+8]
 	call	WriteString
 	call	Crlf
 	jmp		finished
 
 	evenNum:
-		mov		ecx, 4
-		mul		ecx
-		add		edi, eax
-		mov		eax, [edi]
-		sub		edi, ecx
-		add		eax, [edi]
-		mov		ecx, 2
+		mov	ecx, 4
+		mul	ecx
+		add	edi, eax
+		mov	eax, [edi]
+		sub	edi, ecx
+		add	eax, [edi]
+		mov	ecx, 2
 		cdq
-		div		ecx
-		cmp		edx, 0
-		je		dontRound
-		inc		eax				;round up #
+		div	ecx
+		cmp	edx, 0
+		je	dontRound
+		inc	eax				;round up #
 
 	dontRound:
 		call	WriteDec
-		mov		edx, [ebp+8]
+		mov	edx, [ebp+8]
 		call	WriteString
 		call	Crlf
 
 	finished:
 
-	pop		ebp
-	ret		16
+	pop	ebp
+	ret	16
 displayMedian ENDP
 
 
