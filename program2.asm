@@ -46,40 +46,40 @@ main PROC
 ;Introduction - This will display the program title and programmer's name. Will also ask user for name and greet them.
 ;----------------------------------
 	call	Crlf
-	mov		edx, OFFSET heading	
+	mov	edx, OFFSET heading	
 	call	WriteString				
 	call	Crlf						
-	mov		edx, OFFSET heading2		
+	mov	edx, OFFSET heading2		
 	call	WriteString
 	call	Crlf						
 	;call	Crlf
 
 	;greet
-	mov		edx, OFFSET	nameRequest		
+	mov	edx, OFFSET	nameRequest		
 	call	WriteString
-	mov		edx, OFFSET usersName		;move memory address of usersName variable to edx register
-	mov		ecx, 99						;set counter to 99, to match the size of the array, usersName. (0-99) 
+	mov	edx, OFFSET usersName		;move memory address of usersName variable to edx register
+	mov	ecx, 99						;set counter to 99, to match the size of the array, usersName. (0-99) 
 	call	ReadString					;read the user's input. It goes into the memory address of usersName that was moved to the edx register
-	mov		edx, OFFSET greetUser		
+	mov	edx, OFFSET greetUser		
 	call	WriteString					
-	mov		edx, OFFSET usersName		
+	mov	edx, OFFSET usersName		
 	call	WriteString					
 	call	Crlf
 
 ;------------------------------------
 ;User Instructions - These lines of code will ask user how many Fibonacci terms to display and to enter integer between 1-46
 ;-----------------------------------
-	mov		edx, OFFSET prompt1
+	mov	edx, OFFSET prompt1
 	call	WriteString
 	call	Crlf
-	mov		edx, OFFSET prompt2
+	mov	edx, OFFSET prompt2
 	call	WriteString
 	call	Crlf
 	call	Crlf
-	jmp		getUserData					;jump to section
+	jmp	getUserData					;jump to section
 
 outOfRange:
-	mov		edx, OFFSET prompt4
+	mov	edx, OFFSET prompt4
 	call	WriteString
 	call	Crlf
 
@@ -87,66 +87,66 @@ outOfRange:
 ;Get User Data - read the input by user and move from eax register to variable, numOfTerms. Also check if integer is in range.
 ;-----------------------------
 getUserData:
-	mov		edx, OFFSET prompt3
+	mov	edx, OFFSET prompt3
 	call	WriteString
 	call	readInt
-	mov		numOfTerms, eax
+	mov	numOfTerms, eax
 
-	cmp		numOfTerms, LOWLIMIT
-	jle		outOfRange					;will jump if <= to prompt informing user input is out of Range
-	jg		checkMax					;if input > 0, jump to checkMax to ensure integer is not > 46.
+	cmp	numOfTerms, LOWLIMIT
+	jle	outOfRange					;will jump if <= to prompt informing user input is out of Range
+	jg	checkMax					;if input > 0, jump to checkMax to ensure integer is not > 46.
 
 checkMax:
-	cmp		numOfTerms, MAXLIMIT
-	jg		outOfRange
+	cmp	numOfTerms, MAXLIMIT
+	jg	outOfRange
 
 ;-------------------------------
 ;Display Fibs - solve and display Fibonnaci numbers in required spacing
 ;-------------------------------
 	call	Crlf
-	mov		eax, 1
-	mov		temp1, eax
+	mov	eax, 1
+	mov	temp1, eax
 	call	WriteDec			;display first 1
-	mov		edx, OFFSET spaces
+	mov	edx, OFFSET spaces
 	call	WriteString
 
-	mov		eax, 1
-	mov		temp2, eax
+	mov	eax, 1
+	mov	temp2, eax
 	call	WriteDec			;display second 1
-	mov		edx, OFFSET spaces
+	mov	edx, OFFSET spaces
 	call	WriteString
 
-	dec		numOfTerms			;decrementing the variable that will act as counter twice since I spit out the first two items outside of loop (1 and 1)
-	dec		numOfTerms
-	mov		ecx, numOfTerms		;moving the counter t o ecx register					
-	mov		eax, 2
-	mov		columnTrk, eax		;setting tracker for columns @ 2 since first two items are already output. Starting at 0 would throw it all off
+	dec	numOfTerms			;decrementing the variable that will act as counter twice since I spit out the first two items outside of loop (1 and 1)
+	dec	numOfTerms
+	mov	ecx, numOfTerms		;moving the counter t o ecx register					
+	mov	eax, 2
+	mov	columnTrk, eax		;setting tracker for columns @ 2 since first two items are already output. Starting at 0 would throw it all off
 
 FibLoop:	
-	mov		eax, temp1
-	add		eax, temp2
-	mov		fiboNum, eax
+	mov	eax, temp1
+	add	eax, temp2
+	mov	fiboNum, eax
 	call	WriteDec
-	mov		edx, OFFSET spaces
+	mov	edx, OFFSET spaces
 	call	WriteString
 
-	inc		columnTrk
-	mov		edx, 0
-	mov		eax, columnTrk
-	mov		ebx, 5
-	div		ebx
-	cmp		edx, 0
-	jz		newLine
-	jmp		noNewLine
+	inc	columnTrk
+	mov	edx, 0
+	mov	eax, columnTrk
+	mov	ebx, 5
+	div	ebx
+	cmp	edx, 0
+	jz	newLine
+	jmp	noNewLine
 
 newLine:
 	call	Crlf
 
 noNewLine:
-	mov		eax, temp2
-	mov		temp1, eax
-	mov		eax, fiboNum
-	mov		temp2, eax
+	mov	eax, temp2
+	mov	temp1, eax
+	mov	eax, fiboNum
+	mov	temp2, eax
 	loop	FibLoop
 
 ;----------------------------
@@ -154,17 +154,17 @@ noNewLine:
 ;----------------------------
 	call	Crlf
 	call	Crlf
-	mov		edx, OFFSET prompt5
+	mov	edx, OFFSET prompt5
 	call	WriteString
-	mov		edx, OFFSET period
+	mov	edx, OFFSET period
 	call	WriteString
 	call	Crlf
 
-	mov		edx, OFFSET prompt6
+	mov	edx, OFFSET prompt6
 	call	WriteString
-	mov		edx, OFFSET usersName
+	mov	edx, OFFSET usersName
 	call	WriteString
-	mov		edx, OFFSET period
+	mov	edx, OFFSET period
 	call	WriteString
 	call	Crlf
 	call	Crlf
