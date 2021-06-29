@@ -60,20 +60,18 @@ main ENDP
 ;	returns : none
 ;********************
 introduction PROC
-	mov		edx, OFFSET intro
+	mov	edx, OFFSET intro
 	call	WriteString
-	mov		eax, 100
-	;mov     ebx, 30
-	;div		ebx
+	mov	eax, 100
 	call	writedec
 	call	Crlf
 	call	Crlf
 
-	mov		edx, OFFSET prompt1
+	mov	edx, OFFSET prompt1
 	call	WriteString
 	call	Crlf
 
-	mov		edx, OFFSET prompt2
+	mov	edx, OFFSET prompt2
 	call	WriteString
 	call	Crlf
 	call	Crlf
@@ -89,10 +87,10 @@ introduction ENDP
 ;	returns: userNum is initialized with valid #
 ;******************
 getUserData PROC
-	mov		edx, OFFSET prompt3
+	mov	edx, OFFSET prompt3
 	call	WriteString
 	call	readInt
-	mov		userNum, eax
+	mov	userNum, eax
 	call	validate				;call sub-procedure
 	ret
 getUserData ENDP
@@ -105,15 +103,15 @@ getUserData ENDP
 ;	returns: userNum contains valid integer
 ;*******************
 validate PROC
-	cmp		userNum, LOWLIMIT
-	jle		outOfRange
-	cmp		userNum, MAXLIMIT
-	jg		outOfRange
+	cmp	userNum, LOWLIMIT
+	jle	outOfRange
+	cmp	userNum, MAXLIMIT
+	jg	outOfRange
 	call	Crlf
-	jmp		complies		;jumps if userNum is in range 1 - 400
+	jmp	complies		;jumps if userNum is in range 1 - 400
 
 	outOfRange:
-		mov		edx, OFFSET prompt4
+		mov	edx, OFFSET prompt4
 		call	WriteString
 		call	Crlf
 		call	getUserData
@@ -131,34 +129,34 @@ validate ENDP
 ;*********************
 showComposites PROC
 	searchForComposite:
-		mov		found, 0			;found is used as bool variable
+		mov	found, 0			;found is used as bool variable
 		call	isComposite			;sub-procedure called
-		cmp		found, 1			
-		je		printCompNum
+		cmp	found, 1			
+		je	printCompNum
 
-		inc		currentNum
-		mov		eax, totalComps
-		cmp		eax, userNum			;if totalComps found is < userNum, cont. searching for composite numbers, else jmp to finished
-		jl		searchForComposite
-		jmp		finished
+		inc	currentNum
+		mov	eax, totalComps
+		cmp	eax, userNum			;if totalComps found is < userNum, cont. searching for composite numbers, else jmp to finished
+		jl	searchForComposite
+		jmp	finished
 
 	printCompNum:
-		mov		eax, currentNum
+		mov	eax, currentNum
 		call	WriteDec
-		mov		edx, OFFSET spaces
+		mov	edx, OFFSET spaces
 		call	WriteString
 
 	;procedure starts here and then jmp to the top with the instruction called
-	inc		currentNum
-	inc		itemPerLine
-	cmp		itemPerLine, MAXPERLINE			;if == 10, then jmp to newLine as there are 10 items in the current line
-	je		newLine
-	jmp		searchForComposite
+	inc	currentNum
+	inc	itemPerLine
+	cmp	itemPerLine, MAXPERLINE			;if == 10, then jmp to newLine as there are 10 items in the current line
+	je	newLine
+	jmp	searchForComposite
 
 	newLine:
 		call	Crlf
-		mov		itemPerLine, 0			;reset variable to 0 in order to track items for newLine
-		jmp		searchForComposite
+		mov	itemPerLine, 0			;reset variable to 0 in order to track items for newLine
+		jmp	searchForComposite
 
 	finished:
 		ret
@@ -172,23 +170,23 @@ showComposites ENDP
 ;	returns: an incremented totalComps variable to represent a found composite #
 ;*********************
 isComposite PROC
-	mov		ecx, currentNum
-	dec		ecx
+	mov	ecx, currentNum
+	dec	ecx
 
 	checkForComposite:
-		cmp		ecx, 1
-		je		finish
-		mov		edx, 0
-		mov		eax, currentNum
-		div		ecx
-		cmp		edx, 0			
-		je		compFound		;comp = composite
+		cmp	ecx, 1
+		je	finish
+		mov	edx, 0
+		mov	eax, currentNum
+		div	ecx
+		cmp	edx, 0			
+		je	compFound		;comp = composite
 
 	loop	checkForComposite
 
 	compFound:
-		mov		found, 1		;set bool variable to true
-		inc		totalComps		;inc totalComps which acts as a tracker to compare with userNum
+		mov	found, 1		;set bool variable to true
+		inc	totalComps		;inc totalComps which acts as a tracker to compare with userNum
 
 	finish:
 		ret				;return back to local procedure showComposites where isComposite procedure was called
@@ -204,7 +202,7 @@ isComposite ENDP
 farewell PROC
 	call	Crlf
 	call	Crlf
-	mov		edx, OFFSET prompt5
+	mov	edx, OFFSET prompt5
 	call	WriteString
 	call	Crlf
 	call	Crlf
