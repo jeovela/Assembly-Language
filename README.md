@@ -3,7 +3,7 @@
 This repository contains all my coursework pertaining to CS-271: Computer Architecture & Assembly Language.
 Below is a brief description of each program.
 
-Program 1: Program asks user to enter two numbers. Program then calculates the values using elemantary
+Program 1: Program asks user to enter two numbers. Program then calculates the values using elementary
 arithmetic and displays the results to the user.
 
 Program 2: Program calculates Fibonacci numbers. First, program will ask user how many Fibonacci numbers to
